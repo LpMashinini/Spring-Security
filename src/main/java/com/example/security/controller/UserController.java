@@ -44,7 +44,13 @@ public class UserController {
                 new UsernamePasswordAuthenticationToken(authRequest.getUsername(),
                         authRequest.getPassword()));
         if (authenticate.isAuthenticated()){
-            return jwt.generateToken(authRequest.getUsername());
+           String role = authenticate.getAuthorities()
+                    .iterator()
+                    .next()
+                    .getAuthority()
+                    .replace("ROLE_","");
+
+            return jwt.generateToken(authRequest.getUsername(), role);
         }
 
         return null;

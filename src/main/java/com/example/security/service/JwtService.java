@@ -14,12 +14,17 @@ import java.util.HashMap;
 public class JwtService {
 
     public static final String SECRETS = "c7f4a9d2e1b8f6a3c5d7e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6";
-    public String generateToken(String username){
+
+    public String generateToken(String username, String role){
+
+        HashMap<String, Object> claims  = new HashMap<>();
+        claims.put("Role", role);
+
        return Jwts.builder().
                 setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
-                .addClaims(new HashMap<>())
+                .addClaims(claims)
                 .signWith(getSignedKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
