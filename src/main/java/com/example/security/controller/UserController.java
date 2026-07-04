@@ -1,5 +1,6 @@
 package com.example.security.controller;
 
+import com.example.security.domain.entity.AuthRequest;
 import com.example.security.domain.entity.UserEntity;
 import com.example.security.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +29,10 @@ public class UserController {
         user.setActive(true);
 
         userRepository.save(user);
+    }
+
+    @GetMapping("/authenticate")
+    public void authenticate(@RequestParam AuthRequest authRequest){
+
     }
 }
