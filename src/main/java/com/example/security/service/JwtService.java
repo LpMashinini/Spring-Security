@@ -1,5 +1,6 @@
 package com.example.security.service;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -24,6 +25,31 @@ public class JwtService {
     }
 
     private Key getSignedKey(){
+
         return Keys.hmacShaKeyFor(SECRETS.getBytes());
     }
+
+    public Claims verifySignatureAndExtractAllClaims(String token){
+
+        return Jwts.parserBuilder()
+                .setSigningKey(getSignedKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public String extractUsername(String token){
+       return verifySignatureAndExtractAllClaims(token).getSubject();
+    }
+
+    public Date getExpiration(String token){
+       return verifySignatureAndExtractAllClaims(token).getExpiration();
+    }
+
+    public Boolean isTokenExpired(String token){
+        return getExpiration(token).before(new Date());
+    }
+
+
 }
+
