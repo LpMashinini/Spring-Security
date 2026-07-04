@@ -28,22 +28,26 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
         String token = null;
+        Claims claims = null;
 
-        if(authHeader != null && authHeader.startsWith("Bearer")) {
-            token =authHeader.substring(7);
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            token = authHeader.substring(7);
+            if (token != null && !token.isBlank()) {
+                claims = jwtService.verifySignatureAndExtractAllClaims(token);
+            }
         }
 
-        Claims claims = jwtService.verifySignatureAndExtractAllClaims(token);
-        String role = claims.get("Role", String.class);
+        if (claims != null) {
+            String role = claims.get("Role", String.class);
+            List<SimpleGrantedAuthority> authorities =
+                    List.of(new SimpleGrantedAuthority("ROLE_" + role));
 
-       List<SimpleGrantedAuthority> simpleGrantedAuthority =  List.of(new SimpleGrantedAuthority("ROLE_" + role));
-
-
-        if ( token != null && SecurityContextHolder.getContext().getAuthentication() == null){
-            if (!jwtService.isTokenExpired(token)){
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(claims.getSubject(), null, simpleGrantedAuthority);
-                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+            if (SecurityContextHolder.getContext().getAuthentication() == null
+                    && !jwtService.isTokenExpired(token)) {
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(claims.getSubject(), null, authorities);
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
 

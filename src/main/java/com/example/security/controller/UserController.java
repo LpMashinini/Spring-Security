@@ -27,7 +27,7 @@ public class UserController {
     @Autowired
     private JwtService jwt;
 
-    @GetMapping("/encodePassword")
+    @PostMapping("/encodePassword")
     public void saveUserWithEncodedPassword(@RequestParam String username, @RequestParam String password, @RequestParam String role){
 
         UserEntity user = new UserEntity();
