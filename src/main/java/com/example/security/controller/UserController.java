@@ -28,12 +28,13 @@ public class UserController {
     private JwtService jwt;
 
     @GetMapping("/encodePassword")
-    public void saveUserWithEncodedPassword(@RequestParam String username, @RequestParam String password){
+    public void saveUserWithEncodedPassword(@RequestParam String username, @RequestParam String password, @RequestParam String role){
 
         UserEntity user = new UserEntity();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
         user.setActive(true);
+        user.setRole(role);
 
         userRepository.save(user);
     }

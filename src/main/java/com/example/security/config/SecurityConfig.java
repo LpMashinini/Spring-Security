@@ -5,6 +5,7 @@ import com.example.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -32,6 +33,12 @@ public class SecurityConfig {
                 .csrf( csrf -> csrf.disable())
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/user/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/rooms")
+                                .hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/roooms")
+                                .hasAnyRole("ADMIN","STAFF")
+                                .requestMatchers(HttpMethod.GET, "/rooms/**")
+                                .hasAnyRole("ADMIN","STAFF","GUEST ")
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
