@@ -1,5 +1,7 @@
 package com.example.security.controller;
 
+import com.example.security.domain.entity.Room;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,8 +14,9 @@ public class RoomController {
     }
 
     @GetMapping("/{id}")
-    public String getRoomById(@PathVariable Long id){
-        return "Room fecthed for id: " + id;
+    @PostAuthorize("returnObject.assignedTo == authentication.name")
+    public Room getRoomById(@PathVariable Long id){
+        return new Room(id,"Lebogang");
     }
 
     @GetMapping
