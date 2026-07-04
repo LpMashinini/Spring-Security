@@ -23,6 +23,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain basicAuth(HttpSecurity http){
         http
+                .csrf( csrf -> csrf.disable())
                 .authorizeHttpRequests(auth ->
                         auth
                                 .requestMatchers("/hello")
