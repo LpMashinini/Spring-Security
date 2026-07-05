@@ -15,9 +15,10 @@ This repo serves as a knowledge base, a practice ground, and a reference for any
 Throughout this journey, I’ll be exploring:
 - Basics of authentication and authorization
 - Configuring security in Spring Boot applications
+- Cross-Site Request Forgery
 - Role-based access control (RBAC)
 - JWT (JSON Web Token) authentication
-- OAuth2 and OpenID Connect
+- OAuth2 
 - Custom filters and security configurations
 - Securing REST APIs
 - Best practices for production-ready security
@@ -28,6 +29,8 @@ Throughout this journey, I’ll be exploring:
 - **Java 21+**
 - **Spring Boot**
 - **Spring Security**
+- **Spring JPA**
+- **Spring Hibernate**
 - **Maven**
 - **GitHub Actions (CI/CD)**
 
