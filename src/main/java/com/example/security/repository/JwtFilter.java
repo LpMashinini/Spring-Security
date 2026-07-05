@@ -1,5 +1,6 @@
 package com.example.security.repository;
 
+import com.example.security.domain.entity.Role;
 import com.example.security.service.JwtService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -38,9 +39,16 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         if (claims != null) {
-            String role = claims.get("Role", String.class);
-            List<SimpleGrantedAuthority> authorities =
-                    List.of(new SimpleGrantedAuthority("ROLE_" + role));
+
+            Role role = Role.valueOf("ROLE_" + claims.get("Role", String.class));
+
+
+            List<SimpleGrantedAuthority> authorities = new ArrayList<>( List.of(new SimpleGrantedAuthority(role.name())));
+
+
+            role.getPermissions().forEach( permission -> {
+                authorities.add(new SimpleGrantedAuthority(permission.name()));
+            });
 
             if (SecurityContextHolder.getContext().getAuthentication() == null
                     && !jwtService.isTokenExpired(token)) {

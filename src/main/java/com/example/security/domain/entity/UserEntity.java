@@ -19,15 +19,14 @@ public class UserEntity {
     @Column(name = "is_active")
     private Boolean isActive;
 
-
-
     @Column(name = "role")
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     public UserEntity() {
     }
 
-    public UserEntity(Long id, String username, String password, Boolean isActive, String role) {
+    public UserEntity(Long id, String username, String password, Boolean isActive, Role role) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -67,13 +66,15 @@ public class UserEntity {
     public void setActive(Boolean active) {
         isActive = active;
     }
-    public String getRole() {
+
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
+
     @Override
     public String toString() {
         return "UserEntity{" +
@@ -81,6 +82,7 @@ public class UserEntity {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", isActive=" + isActive +
+                ", role='" + role + '\'' +
                 '}';
     }
 }
