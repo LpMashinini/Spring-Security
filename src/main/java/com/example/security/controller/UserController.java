@@ -1,6 +1,7 @@
 package com.example.security.controller;
 
 import com.example.security.domain.entity.AuthRequest;
+import com.example.security.domain.entity.Role;
 import com.example.security.domain.entity.UserEntity;
 import com.example.security.repository.UserRepository;
 import com.example.security.service.JwtService;
@@ -28,7 +29,7 @@ public class UserController {
     private JwtService jwt;
 
     @PostMapping("/encodePassword")
-    public void saveUserWithEncodedPassword(@RequestParam String username, @RequestParam String password, @RequestParam String role){
+    public void saveUserWithEncodedPassword(@RequestParam String username, @RequestParam String password, @RequestParam Role role){
 
         UserEntity user = new UserEntity();
         user.setUsername(username);
